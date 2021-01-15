@@ -21,9 +21,9 @@ import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.commands.OwnerCommand;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
-import net.dv8tion.jda.core.JDAInfo;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.api.JDAInfo;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
 
 /**
  *
@@ -49,7 +49,7 @@ public class DebugCmd extends OwnerCommand
     protected void execute(CommandEvent event)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("System Properties:");
+        sb.append("```\nSystem Properties:");
         for(String key: PROPERTIES)
             sb.append("\n  ").append(key).append(" = ").append(System.getProperty(key));
         sb.append("\n\nJMusicBot Information:")
@@ -76,11 +76,12 @@ public class DebugCmd extends OwnerCommand
                 .append("\n  ID = ").append(event.getJDA().getSelfUser().getId())
                 .append("\n  Guilds = ").append(event.getJDA().getGuildCache().size())
                 .append("\n  Users = ").append(event.getJDA().getUserCache().size());
+        sb.append("\n```");
         
         if(event.isFromType(ChannelType.PRIVATE) 
                 || event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ATTACH_FILES))
             event.getChannel().sendFile(sb.toString().getBytes(), "debug_information.txt").queue();
         else
-            event.reply("Debug Information: ```\n" + sb.toString() + "\n```");
+            event.reply("Debug Information: " + sb.toString());
     }
 }
